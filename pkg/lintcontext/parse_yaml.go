@@ -10,6 +10,7 @@ import (
 	"path/filepath"
 	"strings"
 
+	argoRolloutsV1alpha1 "github.com/argoproj/argo-rollouts/pkg/apis/rollouts/v1alpha1"
 	y "github.com/ghodss/yaml"
 	ocsAppsV1 "github.com/openshift/api/apps/v1"
 	"github.com/pkg/errors"
@@ -41,7 +42,7 @@ func init() {
 	clientScheme := scheme.Scheme
 
 	// Add OpenShift and Autoscaling schema
-	schemeBuilder := runtime.NewSchemeBuilder(ocsAppsV1.AddToScheme, autoscalingV2Beta1.AddToScheme)
+	schemeBuilder := runtime.NewSchemeBuilder(ocsAppsV1.AddToScheme, autoscalingV2Beta1.AddToScheme, argoRolloutsV1alpha1.AddToScheme)
 	if err := schemeBuilder.AddToScheme(clientScheme); err != nil {
 		panic(fmt.Sprintf("Can not add OpenShift schema %v", err))
 	}
