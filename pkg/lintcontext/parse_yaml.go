@@ -14,6 +14,7 @@ import (
 	y "github.com/ghodss/yaml"
 	ocsAppsV1 "github.com/openshift/api/apps/v1"
 	"github.com/pkg/errors"
+    projectcontourv1 "github.com/projectcontour/contour/apis/projectcontour/v1"
 	"golang.stackrox.io/kube-linter/pkg/k8sutil"
 	"helm.sh/helm/v3/pkg/chart"
 	"helm.sh/helm/v3/pkg/chart/loader"
@@ -42,7 +43,7 @@ func init() {
 	clientScheme := scheme.Scheme
 
 	// Add OpenShift and Autoscaling schema
-	schemeBuilder := runtime.NewSchemeBuilder(ocsAppsV1.AddToScheme, autoscalingV2Beta1.AddToScheme, argoRolloutsV1alpha1.AddToScheme)
+	schemeBuilder := runtime.NewSchemeBuilder(ocsAppsV1.AddToScheme, autoscalingV2Beta1.AddToScheme, argoRolloutsV1alpha1.AddToScheme, projectcontourv1.AddToScheme)
 	if err := schemeBuilder.AddToScheme(clientScheme); err != nil {
 		panic(fmt.Sprintf("Can not add OpenShift schema %v", err))
 	}
