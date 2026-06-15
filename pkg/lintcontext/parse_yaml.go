@@ -12,12 +12,14 @@ import (
 	"path/filepath"
 	"strings"
 
+	argoRolloutsV1alpha1 "github.com/argoproj/argo-rollouts/pkg/apis/rollouts/v1alpha1"
 	"github.com/bmatcuk/doublestar/v4"
 	manifestengine "github.com/lburgazzoli/k8s-manifests-lib/pkg/engine"
 	"github.com/lburgazzoli/k8s-manifests-lib/pkg/renderer/kustomize"
 	"github.com/lburgazzoli/k8s-manifests-lib/pkg/types"
 	ocsAppsV1 "github.com/openshift/api/apps/v1"
 	ocpSecV1 "github.com/openshift/api/security/v1"
+	projectcontourv1 "github.com/projectcontour/contour/apis/projectcontour/v1"
 	k8sMonitoring "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1"
 	kedaV1Alpha1 "golang.stackrox.io/kube-linter/pkg/crds/keda/v1alpha1"
 	"golang.stackrox.io/kube-linter/pkg/k8sutil"
@@ -51,7 +53,11 @@ func init() {
 	clientScheme := scheme.Scheme
 
 	// Add OpenShift and Autoscaling schema
-	schemeBuilder := runtime.NewSchemeBuilder(ocsAppsV1.AddToScheme, autoscalingV2Beta1.AddToScheme, k8sMonitoring.AddToScheme, ocpSecV1.AddToScheme, kedaV1Alpha1.AddToScheme)
+	schemeBuilder := runtime.NewSchemeBuilder(
+		ocsAppsV1.AddToScheme, autoscalingV2Beta1.AddToScheme, k8sMonitoring.AddToScheme,
+		ocpSecV1.AddToScheme, kedaV1Alpha1.AddToScheme, argoRolloutsV1alpha1.AddToScheme,
+		projectcontourv1.AddToScheme,
+	)
 	if err := schemeBuilder.AddToScheme(clientScheme); err != nil {
 		panic(fmt.Sprintf("Can not add OpenShift schema %v", err))
 	}
